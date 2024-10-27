@@ -12,11 +12,14 @@ var_names <- read_csv('data/biomarker-raw.csv',
          abbreviation = V2) %>%
   na.omit()
 
+var_names
+
 # function for trimming outliers (good idea??)
 trim <- function(x, .at){
   x[abs(x) > .at] <- sign(x[abs(x) > .at])*.at
   return(x)
 }
+
 
 # read in data
 biomarker_clean <- read_csv('data/biomarker-raw.csv', 

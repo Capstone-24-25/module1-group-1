@@ -43,6 +43,8 @@ proteins_s1 <- ttests_out %>%
   slice_min(p.adj, n = 10) %>%
   pull(protein)
 
+proteins_s1
+
 ## RANDOM FOREST
 ##################
 
@@ -51,6 +53,8 @@ predictors <- biomarker_clean %>%
   select(-c(group, ados))
 
 response <- biomarker_clean %>% pull(group) %>% factor()
+
+
 
 # fit RF
 set.seed(101422)
@@ -68,6 +72,8 @@ proteins_s2 <- rf_out$importance %>%
   mutate(protein = rownames(rf_out$importance)) %>%
   slice_max(MeanDecreaseGini, n = 10) %>%
   pull(protein)
+
+proteins_s2
 
 ## LOGISTIC REGRESSION
 #######################

@@ -39,12 +39,14 @@ Summarize your findings here. I've included some subheaders in a way that seems 
 
 ### Impact of preprocessing and outliers
 
-Tasks 1-2
+**Task 1:** The main reason for log-transforming the protein levels in biomarker-raw.csv is to ensure that the model is linear. It helps to reduce the skew of the data which in turn helps handle outliers. This allows for the analysis to be simpler.
+
+**Task 2:**
 
 ### Methodlogical variations
 
-Task 3
+**Task 3:**
 
 ### Improved classifier
 
-Task 4
+**Task 4:**
