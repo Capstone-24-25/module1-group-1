@@ -7,6 +7,8 @@ library(yardstick)
 library(dplyr)
 load("data/biomarker-clean.RData")
 
+## task 3 
+
 # partition into training and test set before the variable selection process
 set.seed(101422)
 biomarker_split <- biomarker_clean %>%
@@ -24,7 +26,7 @@ test_fn <- function(.df){
          var.equal = F)
 }
 
-ttests_out <- biomarker_clean %>%
+ttests_out <- training(biomarker_split) %>%
   # drop ADOS score
   select(-ados) %>%
   # arrange in long format
@@ -53,10 +55,10 @@ proteins_s1 <- ttests_out %>%
 ##################
 
 # store predictors and response separately
-predictors <- biomarker_clean %>%
+predictors <- training(biomarker_split) %>%
   select(-c(group, ados))
 
-response <- biomarker_clean %>% pull(group) %>% factor()
+response <- training(biomarker_split) %>% pull(group) %>% factor()
 
 
 
@@ -80,12 +82,15 @@ proteins_s2 <- rf_out$importance %>%
 ## LOGISTIC REGRESSION
 #######################
 
-# use a fuzzy intersection by considering the adj. p-value from t-tests and Mean Decrease Gini 
-# from the RF together 
-top_proteins_s1 <- proteins_s1 %>% 
+# # select subset of interest
+# proteins_sstar <- intersect(proteins_s1$protein, proteins_s2$protein)
+
+# use a fuzzy intersection by considering the adj. p-value from t-tests and Mean Decrease Gini
+# from the RF together
+top_proteins_s1 <- proteins_s1 %>%
   slice_min(p.adj, n = 3)
-  
-top_proteins_s2 <- proteins_s2 %>% 
+
+top_proteins_s2 <- proteins_s2 %>%
   slice_max(MeanDecreaseGini, n = 3)
 
 # Get the intersection of proteins in proteins_s1 and proteins_s2
@@ -93,8 +98,8 @@ intersection_proteins <- intersect(proteins_s1$protein, proteins_s2$protein)
 
 # Combine top proteins and intersection, removing duplicates
 proteins_sstar <- bind_rows(top_proteins_s1, top_proteins_s2) %>%
-  filter(protein %in% intersection_proteins | protein %in% c(top_proteins_s1$protein, top_proteins_s2$protein)) %>%
-  distinct(protein, .keep_all = TRUE) %>% 
+  filter( protein %in% c(top_proteins_s1$protein, top_proteins_s2$protein, intersection_proteins)) %>%
+  distinct(protein, .keep_all = TRUE) %>%
   pull(protein)
 
 biomarker_sstar <- biomarker_clean %>%
@@ -131,13 +136,13 @@ biomarker_sstar_testing %>%
                 event_level = 'second')
 
 # before using fuzzy intersection 
-# 1 sensitivity binary         0.812
-# 2 specificity binary         0.733
+# 1 sensitivity binary         0.75 
+# 2 specificity binary         0.8  
 # 3 accuracy    binary         0.774
-# 4 roc_auc     binary         0.883
+# 4 roc_auc     binary         0.871
 
-# after using fuzzy intersection(better)
-# 1 sensitivity binary         0.875
+# after using fuzzy intersection(worse)
+# 1 sensitivity binary         0.562
 # 2 specificity binary         0.867
-# 3 accuracy    binary         0.871
-# 4 roc_auc     binary         0.908
+# 3 accuracy    binary         0.710
+# 4 roc_auc     binary         0.704

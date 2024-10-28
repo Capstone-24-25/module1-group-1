@@ -49,7 +49,9 @@ We were also curious to examine whether ADOS score had any correlation with the 
 
 **Task 3:**
 
-Then, we also explored using a fuzzy intersection instead of a hard intersection to combine the sets of top predictive proteins across selection methods. After experimenting, we found that using protein that are in both the union of the top 3 predictors from each method and the hard intersection(5 proteins in total in which 3 differ from the hard intersection) gives a final model with improved metrics. We tried a fuzzier intersection with the top 5 predictors from each method and the hard intersection but any more proteins hurts the metrics of the final model.
+First,
+
+Then, we also explored using a fuzzy intersection instead of a hard intersection to combine the sets of top predictive proteins across selection methods. After experimenting, we found that using protein that are in the union of the top 3 predictors from each method and the hard intersection(4 proteins in total in which 1 differ from the hard intersection) gives a final model with worse metrics. We tried a fuzzier intersection with the top 5 predictors from each method and the hard intersection but that also hurts the metrics.
 
 ### Improved classifier
 
