@@ -129,6 +129,7 @@ biomarker_sstar_testing %>%
   class_metrics(estimate = est,
                 truth = tr_c, pred,
                 event_level = 'second')
+
 # before using fuzzy intersection 
 # 1 sensitivity binary         0.812
 # 2 specificity binary         0.733
