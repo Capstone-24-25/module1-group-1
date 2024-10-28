@@ -23,7 +23,7 @@ library(tidyverse)
 
 ## Abstract
 
-Write a brief one-paragraph abstract that describes the contents of your write-up.
+With the knowledge we have on hand now regarding proteins and their relationship with autism, we sought out to explore the sensitivity of the results and how different methodologies affected them.
 
 ## Dataset
 
