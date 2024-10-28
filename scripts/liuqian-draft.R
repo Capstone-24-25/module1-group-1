@@ -83,10 +83,10 @@ proteins_s2 <- rf_out$importance %>%
 # use a fuzzy intersection by considering the adj. p-value from t-tests and Mean Decrease Gini 
 # from the RF together 
 top_proteins_s1 <- proteins_s1 %>% 
-  slice_min(p.adj, n = 5)
+  slice_min(p.adj, n = 3)
   
 top_proteins_s2 <- proteins_s2 %>% 
-  slice_max(MeanDecreaseGini, n = 5)
+  slice_max(MeanDecreaseGini, n = 3)
 
 # Get the intersection of proteins in proteins_s1 and proteins_s2
 intersection_proteins <- intersect(proteins_s1$protein, proteins_s2$protein)
@@ -135,8 +135,8 @@ biomarker_sstar_testing %>%
 # 3 accuracy    binary         0.774
 # 4 roc_auc     binary         0.883
 
-# after using fuzzy intersection(worsen)
-# 1 sensitivity binary         0.562
-# 2 specificity binary         0.8  
-# 3 accuracy    binary         0.677
-# 4 roc_auc     binary         0.758
+# after using fuzzy intersection(better)
+# 1 sensitivity binary         0.875
+# 2 specificity binary         0.867
+# 3 accuracy    binary         0.871
+# 4 roc_auc     binary         0.908
