@@ -48,7 +48,7 @@ ttests_out <- training(biomarker_split) %>%
 
 # select significant proteins
 proteins_s1 <- ttests_out %>%
-  slice_min(p.adj, n = 10) %>%
+  slice_min(p.adj, n = 20) %>%
   select(protein, p.adj)
 
 ## RANDOM FOREST
@@ -76,7 +76,7 @@ rf_out$confusion
 proteins_s2 <- rf_out$importance %>% 
   as_tibble() %>%
   mutate(protein = rownames(rf_out$importance)) %>%
-  slice_max(MeanDecreaseGini, n = 10) %>%
+  slice_max(MeanDecreaseGini, n = 20) %>%
   select(protein, MeanDecreaseGini)
 
 ## LOGISTIC REGRESSION
@@ -88,19 +88,21 @@ proteins_s2 <- rf_out$importance %>%
 # use a fuzzy intersection by considering the adj. p-value from t-tests and Mean Decrease Gini
 # from the RF together
 top_proteins_s1 <- proteins_s1 %>%
-  slice_min(p.adj, n = 3)
+  slice_min(p.adj, n = 10)
 
 top_proteins_s2 <- proteins_s2 %>%
-  slice_max(MeanDecreaseGini, n = 3)
+  slice_max(MeanDecreaseGini, n = 10)
 
 # Get the intersection of proteins in proteins_s1 and proteins_s2
 intersection_proteins <- intersect(proteins_s1$protein, proteins_s2$protein)
 
-# Combine top proteins and intersection, removing duplicates
-proteins_sstar <- bind_rows(top_proteins_s1, top_proteins_s2) %>%
-  filter( protein %in% c(top_proteins_s1$protein, top_proteins_s2$protein, intersection_proteins)) %>%
+# Combine top proteins and intersection
+proteins_top <- bind_rows(top_proteins_s1, top_proteins_s2) %>%
+  filter(protein %in% c(top_proteins_s1$protein, top_proteins_s2$protein)) %>%
   distinct(protein, .keep_all = TRUE) %>%
   pull(protein)
+
+proteins_sstar <- intersect(intersection_proteins, proteins_top)
 
 biomarker_sstar <- biomarker_clean %>%
   select(group, any_of(proteins_sstar)) %>%
@@ -135,7 +137,7 @@ biomarker_sstar_testing %>%
                 truth = tr_c, pred,
                 event_level = 'second')
 
-# before using fuzzy intersection 
+# before using fuzzy intersection(in class analysis)
 # 1 sensitivity binary         0.75 
 # 2 specificity binary         0.8  
 # 3 accuracy    binary         0.774
@@ -145,4 +147,17 @@ biomarker_sstar_testing %>%
 # 1 sensitivity binary         0.562
 # 2 specificity binary         0.867
 # 3 accuracy    binary         0.710
-# 4 roc_auc     binary         0.704
+# 4 roc_auc     binary         0.746
+
+## task 4 
+
+# choose 20 instead of 10 proteins from each method and 
+# intersect the intersection of these two sets with the 
+# union of the top 10 proteins to get the final panel of 
+# proteins (5)
+
+# 1 sensitivity binary         0.812
+# 2 specificity binary         0.867
+# 3 accuracy    binary         0.839
+# 4 roc_auc     binary         0.871
+
