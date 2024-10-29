@@ -53,7 +53,7 @@ We carried out the entire selection procedure on a training partition, and teste
 
 First,
 
-Then, we also explored using a fuzzy intersection instead of a hard intersection to combine the sets of top predictive proteins across selection methods. After experimenting, we found that using protein that are in the union of the top 3 predictors from each method and the hard intersection(5 proteins in total in which 1 is additional to the hard intersection) gives a final model with worse metrics(accuracy decreased from 0.774 to 0.710). We tried a fuzzier intersection with the top 5 predictors from each method and the hard intersection but that also hurts the metrics.
+Then, we also explored using a fuzzy intersection instead of a hard intersection to combine the sets of top predictive proteins across selection methods. We did this through the stringdist_inner_join function in the "fuzzyjoin" package, using the Jaro-Winkler similarity scores. After tuning we decided that the best maximum allowed distance for the fuzzy intersection is around 0.46, which produced an intersection with 5 proteins "DERM", "IgD", "TSP4", "FSTL1", "MAPK14", instead of the four protein hard intersection. However, the logistic regression shows that this panel of proteins does not significantly improve the prediction accuracy.
 
 ### Improved classifier
 
