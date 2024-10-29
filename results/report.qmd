@@ -23,7 +23,7 @@ library(tidyverse)
 
 ## Abstract
 
-With the knowledge we have on hand now regarding proteins and their relationship with autism, we sought out to explore the sensitivity of the results and how different methodologies affected them. akdj;lad
+For this project, we looked at data from Hewitson *et al.* (2021). *Blood biomarker discovery for autism spectrum disorder: A proteomic analysis.* In this study, they wanted to see if there were differences in the levels of various of proteins between young boys who were in the autism spectrum and those who were typically developing. A total of 1125 proteins were analyzed through various machine learning methods to see which proteins could be identified as blood bio-markers for autism spectrum disorder. For our project, we wanted to look deeper into these different methodologies. We aimed to explore the sensitivity of the results of the different design choices. In order to do this, we first looked further into how outliers affect the overall result and what we can do to minimize their effects. Then, we modified the various methods -- T-test, logistical regression, and random forest -- to test their accuracy and tested if other methods could further improve accuracy.
 
 ## Dataset
 
