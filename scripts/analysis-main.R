@@ -108,6 +108,49 @@ load("data/biomarker-clean.RData")
 
 ########## TASK 3
 
+library(tidyverse)
+
+
+# get names
+var_names <- read_csv('data/biomarker-raw.csv', 
+                      col_names = F, 
+                      n_max = 2, 
+                      col_select = -(1:2)) %>%
+  t() %>%
+  as_tibble() %>%
+  rename(name = V1, 
+         abbreviation = V2) %>%
+  na.omit()
+
+var_names
+
+# function for trimming outliers (good idea??)
+trim <- function(x, .at){
+  x[abs(x) > .at] <- sign(x[abs(x) > .at])*.at
+  return(x)
+}
+
+
+# read in data
+biomarker_clean <- read_csv('data/biomarker-raw.csv', 
+                            skip = 2,
+                            col_select = -2L,
+                            col_names = c('group', 
+                                          'empty',
+                                          pull(var_names, abbreviation),
+                                          'ados'),
+                            na = c('-', '')) %>%
+  filter(!is.na(group)) %>%
+  # log transform, center and scale, and trim
+  mutate(across(.cols = -c(group, ados), 
+                ~ trim(scale(log10(.x))[, 1], .at = 3))) %>%
+  # reorder columns
+  select(group, ados, everything())
+
+# export as r binary
+save(list = 'biomarker_clean', 
+     file = 'data/biomarker-clean.RData')
+
 # partition into training and test set before the variable selection process
 set.seed(101422)
 biomarker_split <- biomarker_clean %>%
@@ -184,22 +227,31 @@ proteins_s2 <- rf_out$importance %>%
 # # select subset of interest
 # proteins_sstar <- intersect(proteins_s1$protein, proteins_s2$protein)
 
-# use a fuzzy intersection by considering the adj. p-value from t-tests and Mean Decrease Gini
-# from the RF together
-top_proteins_s1 <- proteins_s1 %>%
-  slice_min(p.adj, n = 3)
+# # use a fuzzy intersection by considering the adj. p-value from t-tests and Mean Decrease Gini
+# # from the RF together
+# top_proteins_s1 <- proteins_s1 %>%
+#   slice_min(p.adj, n = 3)
+# 
+# top_proteins_s2 <- proteins_s2 %>%
+#   slice_max(MeanDecreaseGini, n = 3)
+# 
+# # Get the intersection of proteins in proteins_s1 and proteins_s2
+# intersection_proteins <- intersect(proteins_s1$protein, proteins_s2$protein)
+# 
+# # Combine top proteins and intersection
+# proteins_sstar <- bind_rows(proteins_s1, proteins_s2) %>%
+#   filter(protein %in% intersection_proteins | protein %in% c(top_proteins_s1$protein, top_proteins_s2$protein)) %>%
+#   distinct(protein, .keep_all = TRUE) %>%
+#   pull(protein)
 
-top_proteins_s2 <- proteins_s2 %>%
-  slice_max(MeanDecreaseGini, n = 3)
+# Fuzzy intersection with a specified similarity threshold
+fuzzy_intersection <- stringdist_inner_join(proteins_s1, proteins_s2, 
+                                            by = "protein", 
+                                            max_dist = 0.46,  # maximum allowed distance
+                                            method = "jw") # Jaro-Winkler similarity
 
-# Get the intersection of proteins in proteins_s1 and proteins_s2
-intersection_proteins <- intersect(proteins_s1$protein, proteins_s2$protein)
-
-# Combine top proteins and intersection
-proteins_sstar <- bind_rows(top_proteins_s1, top_proteins_s2) %>%
-  filter(protein %in% intersection_proteins | protein %in% c(top_proteins_s1$protein, top_proteins_s2$protein)) %>%
-  distinct(protein, .keep_all = TRUE) %>%
-  pull(protein)
+# Combine the matched protein names from both columns and keep unique values
+proteins_sstar <- unique(c(fuzzy_intersection$protein.x, fuzzy_intersection$protein.y))
 
 biomarker_sstar <- biomarker_clean %>%
   select(group, any_of(proteins_sstar)) %>%
@@ -234,17 +286,18 @@ biomarker_sstar_testing %>%
                 truth = tr_c, pred,
                 event_level = 'second')
 
-# before using fuzzy intersection(in class analysis)
+# before using fuzzy intersection(in class analysis"DERM" "IgD" "TSP4" "FSTL1")
 # 1 sensitivity binary         0.75 
 # 2 specificity binary         0.8  
 # 3 accuracy    binary         0.774
 # 4 roc_auc     binary         0.871
 
-# after using fuzzy intersection(worse)
-# 1 sensitivity binary         0.562
-# 2 specificity binary         0.867
-# 3 accuracy    binary         0.710
-# 4 roc_auc     binary         0.746
+# after using fuzzy intersection(no significant improvement"DERM" "IgD" "TSP4" "FSTL1" "MAPK14")
+# 1 sensitivity binary         0.75 
+# 2 specificity binary         0.8  
+# 3 accuracy    binary         0.774
+# 4 roc_auc     binary         0.888
+
 
 
 ########## TASK 4
