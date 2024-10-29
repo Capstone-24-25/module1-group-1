@@ -336,9 +336,8 @@ top_proteins_s2 <- proteins_s2 %>%
 # Get the intersection of proteins in proteins_s1 and proteins_s2
 intersection_proteins <- intersect(proteins_s1$protein, proteins_s2$protein)
 
-# Combine top proteins and intersection
+# Combine top proteins from both methods
 proteins_top <- bind_rows(top_proteins_s1, top_proteins_s2) %>%
-  filter(protein %in% c(top_proteins_s1$protein, top_proteins_s2$protein)) %>%
   distinct(protein, .keep_all = TRUE) %>%
   pull(protein)
 
