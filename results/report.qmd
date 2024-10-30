@@ -61,4 +61,4 @@ Then, we also explored using a fuzzy intersection instead of a hard intersection
 
 **Task 4:**
 
-Our second attempt was to use 20 top proteins for each method and used a different intersection method. We used take the hard intersection of the 20 top proteins from each and then removed any protein that is not in the top 10 predictive proteins for each method. This gives us a 5-protein panel: "DERM" "IgD" "TSP4" "PTN" "FSTL1", which achieved a better accuracy. The accuracy for the in-class analysis was 0.774 and this panel achieved an accuracy of 0.839.
+Our attempt was to use 20 top proteins for each method and used a different intersection method. We took the hard intersection of the 20 top proteins from each and then removed any protein that is not in the top 10 predictive proteins for each method. This gives us a 5-protein panel: "DERM" "IgD" "TSP4" "PTN" "FSTL1", which achieved a better accuracy. The accuracy for the in-class analysis was 0.774 and this panel achieved an accuracy of 0.839.
