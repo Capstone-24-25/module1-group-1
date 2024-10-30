@@ -37,9 +37,10 @@ We began with a simple exploratory data analysis and data preprocessing. In the 
 
 For the second part of our analysis, we examine whether different methodologies for protein selection will result in better model performance. The first methodology change involves using a train-test split, where 80% of the data is used for model training and the other 20% for testing accuracy. This resulted in a 0.774 accuracy, which is worse than the original analysis. Next, we increased the number of proteins to be chosen during the selection process. The original method used the top 10 proteins from each procedure, and we tried selecting anywhere from 11-30 proteins. We found that selecting more proteins tends to increase accuracy up to 0.96 at 26 proteins, after which accuracy begins to drop off. Finally, we tested out a fuzzy intersection when determining the best combination of proteins across all selection methods. This method generates a panel of 10 proteins(DERM" "IgD" "TSP4" "MRC2" "PTN" "FSTL1" "MAPK14" "TPSG1" "SRCN1" "SOST") but does not significantly improve accuracy.
 
+Finally, we used a combination of selecting more proteins and a fuzzy intersection. We selected the top 20 predictive proteins from each of the methods and chose the proteins common to all 3 methods. Then we removed any proteins that were not in the top 10 for their respective method.
+
 ## Findings
 
-Summarize your findings here. I've included some subheaders in a way that seems natural to me; you can structure this section however you like.
 
 ### Impact of preprocessing and outliers
 
