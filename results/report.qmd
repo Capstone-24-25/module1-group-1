@@ -27,9 +27,7 @@ For this project, we looked at data from Hewitson *et al.* (2021). *Blood biomar
 
 ## Dataset
 
-Write a brief data description, including: how data were obtained; sample characteristics; variables measured; and data preprocessing. This can be largely based on the source paper and should not exceed 1-2 paragraphs.
-
-Data for this project was obtained from *Blood biomarker discovery for autism spectrum disorder: A proteomic analysis.* Their study
+Data for this project was obtained from *Blood biomarker discovery for autism spectrum disorder: A proteomic analysis* which was used as the basis for preprocessing and in class analysis that was done within the context of this class. The study tested 1125 proteins and ran them through various different machine learning methodologies. The goal was to see if any conclusions could be made considering the proteins levels regarding whether these proteins are autism blood biomarkers. They tested 76 boys on the autism spectrum disorder and 78 boys that were typically developing. All participants were aged 18 months to 8 years. The data was collected through a blood draw from each participant. The blood was then centrifuged and tested. 1317 proteins were analyzed and out of those, only 1125 passed the quality control so for the remainder of the tests, only those were considered. A random forest, t-test, and correlation approaches were taken to identify the top 10 predictive proteins from each of the methods. Upon further testing, 9 proteins were identified as the core proteins. The core proteins were then used for further analysis in the study. In the end, the study yielded that the levels of the core proteins were severely different in boys with ASD than those who were TD. Overall, the data does show signs that correlation between proteins and ASD may exist and that these proteins could potentially be considered autism spectrum blood biomarkers.
 
 ## Summary of published analysis
 
