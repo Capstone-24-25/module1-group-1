@@ -55,8 +55,10 @@ We carried out the entire selection procedure on a training partition, and teste
 
 First, we tried to split the data set into $80\%$ training set and $20\%$ validation set. Then we tried for different numbers of top predictive proteins using each selection method to train our model. For 10-30 numbers of proteins, the accuracy increases with the number of proteins until the accuracy starts to decrease after the number of proteins is 26. When we pick 26 top predictive proteins, we can get a $96\%$ accuracy on the validation set.
 
-Then, we also explored using a fuzzy intersection instead of a hard intersection to combine the sets of top predictive proteins across selection methods. We did this through the stringdist_inner_join function in the "fuzzyjoin" package, using the Jaro-Winkler similarity scores. After tuning we decided that the best maximum allowed distance for the fuzzy intersection is around 0.46, which produced an intersection with 5 proteins "DERM", "IgD", "TSP4", "FSTL1", "MAPK14", instead of the four protein hard intersection. However, the logistic regression shows that this panel of proteins does not significantly improve the prediction accuracy.
+Then, we also explored using a fuzzy intersection instead of a hard intersection to combine the sets of top predictive proteins across selection methods. We did this through the stringdist_inner_join function in the "fuzzyjoin" package, using the Jaro-Winkler similarity scores. After tuning we decided that the best maximum allowed distance for the fuzzy intersection is around 0.46, which produced an intersection with 10 proteins "DERM" "IgD" "TSP4" "MRC2" "PTN" "FSTL1" "MAPK14" "TPSG1" "SRCN1" "SOST", instead of the 6 protein hard intersection. However, the logistic regression shows that this panel of proteins does not significantly improve the prediction accuracy.
 
 ### Improved classifier
 
 **Task 4:**
+
+Our second attempt was to use 20 top proteins for each method and used a different intersection method. We used take the hard intersection of the 20 top proteins from each and then removed any protein that is not in the top 10 predictive proteins for each method. This gives us a 5-protein panel: "DERM" "IgD" "TSP4" "PTN" "FSTL1", which achieved a better accuracy. The accuracy for the in-class analysis was 0.774 and this panel achived an accuracy of 0.839.

@@ -147,9 +147,9 @@ proteins_s2 <- rf_out$importance %>%
 #   pull(protein)
 
 # Fuzzy intersection with a specified similarity threshold
-fuzzy_intersection <- stringdist_inner_join(proteins_s1, proteins_s2, 
-                                            by = "protein", 
-                                            max_dist = 0.46,  # maximum allowed distance
+fuzzy_intersection <- stringdist_inner_join(proteins_s1, proteins_s2,
+                                            by = "protein",
+                                            max_dist = 0.4,  # maximum allowed distance
                                             method = "jw") # Jaro-Winkler similarity
 
 # Combine the matched protein names from both columns and keep unique values
