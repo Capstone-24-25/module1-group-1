@@ -23,11 +23,13 @@ library(tidyverse)
 
 ## Abstract
 
-With the knowledge we have on hand now regarding proteins and their relationship with autism, we sought out to explore the sensitivity of the results and how different methodologies affected them.
+For this project, we looked at data from Hewitson *et al.* (2021). *Blood biomarker discovery for autism spectrum disorder: A proteomic analysis.* In this study, they wanted to see if there were differences in the levels of various of proteins between young boys who were in the autism spectrum and those who were typically developing. A total of 1125 proteins were analyzed through various machine learning methods to see which proteins could be identified as blood bio-markers for autism spectrum disorder. For our project, we wanted to look deeper into these different methodologies. We aimed to explore the sensitivity of the results of the different design choices. In order to do this, we first looked further into how outliers affect the overall result and what we can do to minimize their effects. Then, we modified the various methods -- T-test, logistical regression, and random forest -- to test their accuracy and tested if other methods could further improve accuracy.
 
 ## Dataset
 
 Write a brief data description, including: how data were obtained; sample characteristics; variables measured; and data preprocessing. This can be largely based on the source paper and should not exceed 1-2 paragraphs.
+
+Data for this project was obtained from *Blood biomarker discovery for autism spectrum disorder: A proteomic analysis.* Their study
 
 ## Summary of published analysis
 
@@ -39,7 +41,7 @@ Summarize your findings here. I've included some subheaders in a way that seems 
 
 ### Impact of preprocessing and outliers
 
-**Task 1:** The main reason for log-transforming the protein levels in biomarker-raw.csv is to ensure that the model is linear. It helps to reduce the skew of the data which in turn helps handle outliers. This allows for the analysis to be simpler.
+**Task 1:** The main reason for log-transforming the protein levels in biomarker-raw.csv is to ensure that the model is linear. It helps to reduce the skew of the data which in turn helps handle outliers. This allows for the analysis to be simpler. Log-transformation compresses the data which can be seen in the preprocessing script. This will ideally make visualizing the distributions of the various proteins simpler and reduce any outliers that may be present. Looking at the raw distributions for the sample of proteins, we can see that the values are much larger than in the log-transformation version.
 
 **Task 2:** The mean outlier count among all 154 subjects was roughly 15.45. There were some outlier subjects that had an exceedingly high number of outliers, in particular 7 subjects with over 50. Of these outlier subjects, 5 of them were from the TD group while 2 of them were from the ASD group. The mean outlier count for the entire ASD group was 13.25, compared to 17.59 in the TD group. Therefore, it appears that subjects in the TD group tend to have more frequent outliers. Considering there are over 1300 proteins in the dataset, this difference does not seem significant. This difference can be explained by the greater presence of outlier subjects in the TD group, which skews the value of the mean upward. If we look at the median, which is less impacted by outliers, both groups have the exact same median count of 8.5.
 
@@ -48,6 +50,12 @@ We were also curious to examine whether ADOS score had any correlation with the 
 ### Methodlogical variations
 
 **Task 3:**
+
+We carried out the entire selection procedure on a training partition, and tested the final model on the testing set. The results show that the model has a predictive accuracy of 0.774, which is lower than the in-class analysis where the selection procedure is carried out on the entire data set.
+
+First,
+
+Then, we also explored using a fuzzy intersection instead of a hard intersection to combine the sets of top predictive proteins across selection methods. We did this through the stringdist_inner_join function in the "fuzzyjoin" package, using the Jaro-Winkler similarity scores. After tuning we decided that the best maximum allowed distance for the fuzzy intersection is around 0.46, which produced an intersection with 5 proteins "DERM", "IgD", "TSP4", "FSTL1", "MAPK14", instead of the four protein hard intersection. However, the logistic regression shows that this panel of proteins does not significantly improve the prediction accuracy.
 
 ### Improved classifier
 
