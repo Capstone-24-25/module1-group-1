@@ -41,7 +41,6 @@ Finally, we used a combination of selecting more proteins and a fuzzy intersecti
 
 ## Findings
 
-
 ### Impact of preprocessing and outliers
 
 **Task 1:** The main reason for log-transforming the protein levels in biomarker-raw.csv is to ensure that the model is linear. It helps to reduce the skew of the data which in turn helps handle outliers. This allows for the analysis to be simpler. Log-transformation compresses the data which can be seen in the preprocessing script. This will ideally make visualizing the distributions of the various proteins simpler and reduce any outliers that may be present. Looking at the raw distributions for the sample of proteins, we can see that the values are much larger than in the log-transformation version.
