@@ -128,28 +128,13 @@ proteins_s2 <- rf_out$importance %>%
 
 # # select subset of interest
 # proteins_sstar <- intersect(proteins_s1$protein, proteins_s2$protein)
+# 
 
-# # use a fuzzy intersection by considering the adj. p-value from t-tests and Mean Decrease Gini
-# # from the RF together
-# top_proteins_s1 <- proteins_s1 %>%
-#   slice_min(p.adj, n = 3)
-# 
-# top_proteins_s2 <- proteins_s2 %>%
-#   slice_max(MeanDecreaseGini, n = 3)
-# 
-# # Get the intersection of proteins in proteins_s1 and proteins_s2
-# intersection_proteins <- intersect(proteins_s1$protein, proteins_s2$protein)
-# 
-# # Combine top proteins and intersection
-# proteins_sstar <- bind_rows(proteins_s1, proteins_s2) %>%
-#   filter(protein %in% intersection_proteins | protein %in% c(top_proteins_s1$protein, top_proteins_s2$protein)) %>%
-#   distinct(protein, .keep_all = TRUE) %>%
-#   pull(protein)
 
 # Fuzzy intersection with a specified similarity threshold
 fuzzy_intersection <- stringdist_inner_join(proteins_s1, proteins_s2,
                                             by = "protein",
-                                            max_dist = 0.4,  # maximum allowed distance
+                                            max_dist = 0.46,  # maximum allowed distance
                                             method = "jw") # Jaro-Winkler similarity
 
 # Combine the matched protein names from both columns and keep unique values
@@ -202,11 +187,6 @@ biomarker_sstar_testing %>%
 
 
 ## task 4
-
-# partition into training and test set before the variable selection process
-set.seed(101422)
-biomarker_split <- biomarker_clean %>%
-  initial_split(prop = 0.8)
 
 ## MULTIPLE TESTING
 ####################
